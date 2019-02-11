@@ -37,36 +37,39 @@ function onMessageHandler(target, context, msg, self) {
     );
   }
   if (commandName[1] == null) {
-    console.log("commandName[1] is null");
+    
   } else if (commandName[0] === "!rank") {
     let url = twitchCONFIG.URL;
     let steamID = commandName[1];
-    console.log(twitchCONFIG.BOT_USERNAME);
     url += steamID.toString();
 
-    http.get(url, res => {
-      console.log("Got response: " + res.statusCode);
-      res.setEncoding("utf8");
-      res.on("data", function(chunk) {
-        let data = JSON.parse(chunk);
-        if (utils.isEmpty(data.user_info)) {
-          let targetName = "@" + context.username;
-          client.say(
-            target,
-            `${targetName} your id is wrong or bot can't access to information`
-          );
-        } else {
-          let rankString = utils.getRank(data, steamID);
-
-          let targetName = "@" + context.username;
-
-          client.say(
-            target,
-            `${targetName} your current rank is ${rankString}`
-          );
-        }
+    try{
+      http.get(url, res => {
+        console.log("Got response: " + res.statusCode);
+        res.setEncoding("utf8");
+        res.on("data", function(chunk) {
+          let data = JSON.parse(chunk);
+          if (utils.isEmpty(data.user_info)) {
+            let targetName = "@" + context.username;
+            client.say(
+              target,
+              `${targetName} your id is wrong or bot can't access to information`
+            );
+          } else {
+            let rankString = utils.getRank(data, steamID);
+  
+            let targetName = "@" + context.username;
+  
+            client.say(
+              target,
+              `${targetName} your current rank is ${rankString}`
+            );
+          }
+        });
       });
-    });
+    }catch(err){
+      console.err(`Errro => ${err}`);
+    }
   }
 }
 
