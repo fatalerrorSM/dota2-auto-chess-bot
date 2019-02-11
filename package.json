@@ -1,0 +1,16 @@
+{
+  "name": "dota2autochessbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "feSM",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "long": "^4.0.0",
+    "tmi.js": "^1.3.1"
+  }
+}
