@@ -20,6 +20,9 @@ const util = {
       return;
     } else {
       switch (data.user_info[steamID].mmr_level) {
+        case 0:
+          rankString = "uncalibrated";
+          break;
         case 1:
           rankString = "♟ Pawn 1";
           break;
