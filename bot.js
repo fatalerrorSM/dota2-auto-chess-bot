@@ -37,18 +37,18 @@ function onMessageHandler(target, context, msg, self) {
     );
   }
   if (commandName[1] == null) {
-    
   } else if (commandName[0] === "!rank") {
     let url = twitchCONFIG.URL;
     let steamID = commandName[1];
     url += steamID.toString();
 
-    try{
+    try {
       http.get(url, res => {
         console.log("Got response: " + res.statusCode);
         res.setEncoding("utf8");
         res.on("data", function(chunk) {
           let data = JSON.parse(chunk);
+          console.log(data);
           if (utils.isEmpty(data.user_info)) {
             let targetName = "@" + context.username;
             client.say(
@@ -57,17 +57,18 @@ function onMessageHandler(target, context, msg, self) {
             );
           } else {
             let rankString = utils.getRank(data, steamID);
-  
+
             let targetName = "@" + context.username;
-  
+
+            let matches = data.user_info[steamID].match;
             client.say(
               target,
-              `${targetName} your current rank is ${rankString}`
+              `${targetName} your current rank is ${rankString} (played matches -> ${matches})`
             );
           }
         });
       });
-    }catch(err){
+    } catch (err) {
       console.err(`Errro => ${err}`);
     }
   }
