@@ -37,37 +37,33 @@ function onMessageHandler(target, context, msg, self) {
   } else if (commandName[0] === "!rank" && commandName[1].length == 17) {
     let url = twitchCONFIG.URL;
     let steamID = commandName[1];
+    
     url += steamID.toString();
+    http.get(url, res => {
+      console.log("Got response: " + res.statusCode);
+      res.setEncoding("utf8");
+      res.on("data", function(chunk) {
+        
+        let data = JSON.parse(chunk);
+        if (utils.isEmpty(data.user_info)) {
+          let targetName = "@" + context.username;
+          client.say(
+            target,
+            `${targetName} your id is wrong or bot can't access to information FeelsRainMan`
+          );
+        } else {
+          let rankString = utils.getRank(data, steamID);
 
-    try {
-      http.get(url, res => {
-        console.log("Got response: " + res.statusCode);
-        res.setEncoding("utf8");
-        res.on("data", function(chunk) {
-          let data = JSON.parse(chunk);
-          console.log(data);
-          if (utils.isEmpty(data.user_info)) {
-            let targetName = "@" + context.username;
-            client.say(
-              target,
-              `${targetName} your id is wrong or bot can't access to information`
-            );
-          } else {
-            let rankString = utils.getRank(data, steamID);
+          let targetName = "@" + context.username;
 
-            let targetName = "@" + context.username;
-
-            let matches = data.user_info[steamID].match;
-            client.say(
-              target,
-              `${targetName} your current rank is ${rankString} (played matches -> ${matches})`
-            );
-          }
-        });
+          let matches = data.user_info[steamID].match;
+          client.say(
+            target,
+            `${targetName} your current rank is ${rankString} (played matches -> ${matches})`
+          );
+        }
       });
-    } catch (err) {
-      client.say(target,`sorry,but bot has some problems FeelsRainMan`)
-    }
+    });
   }
 }
 
@@ -75,3 +71,7 @@ function onMessageHandler(target, context, msg, self) {
 function onConnectedHandler(addr, port) {
   console.log(`* Connected to ${addr}:${port}`);
 }
+
+// catch (err) {
+//   client.say(target,`sorry,but bot has some problems FeelsRainMan`)
+// } KappaIsaMainSin12
