@@ -27,9 +27,6 @@ function onMessageHandler(target, context, msg, self) {
       "Чтобы найти информацию о вашем ранге и ммр в DotaAutoChess -> введите:!rank + ваш steamID (пример:!rank 7656119809*******)"
     );
   }
-  if (commandName[0] === "!disc") {
-    client.say(target, "discord с лигами https://discord.gg/HfhjDwf");
-  }
   if (commandName[0] === "!info") {
     client.say(
       target,
@@ -37,7 +34,7 @@ function onMessageHandler(target, context, msg, self) {
     );
   }
   if (commandName[1] == null) {
-  } else if (commandName[0] === "!rank") {
+  } else if (commandName[0] === "!rank" && commandName[1].length == 17) {
     let url = twitchCONFIG.URL;
     let steamID = commandName[1];
     url += steamID.toString();
@@ -69,7 +66,7 @@ function onMessageHandler(target, context, msg, self) {
         });
       });
     } catch (err) {
-      console.err(`Errro => ${err}`);
+      client.say(target,`sorry,but bot has some problems FeelsRainMan`)
     }
   }
 }
