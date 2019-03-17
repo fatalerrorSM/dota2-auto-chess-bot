@@ -19,7 +19,7 @@ client.on("connected", onConnectedHandler);
 // Connect to Twitch:
 client.connect();
 
-function onMessageHandler(target, context, msg, self) {
+async function onMessageHandler(target, context, msg, self) {
   const commandName = msg.split(" ");
   if (commandName[0] === "!инфа") {
     client.say(
@@ -39,8 +39,8 @@ function onMessageHandler(target, context, msg, self) {
     let steamID = commandName[1];
 
     url += steamID.toString();
-    got(url).then(res => {
-      let data = JSON.parse(res.body);
+    await got(url).then(res => {
+     let data = JSON.parse(res.body);
       console.log(data);
       if (utils.isEmpty(data.user_info)) {
         let targetName = "@" + context.username;
@@ -52,11 +52,10 @@ function onMessageHandler(target, context, msg, self) {
         let rankString = utils.getRank(data, steamID);
 
         let targetName = "@" + context.username;
-
-        let matches = data.user_info[steamID].match;
+        
         client.say(
           target,
-          `${targetName} your current rank is ${rankString} (played matches -> ${matches})`
+          `${targetName} your current rank is ${rankString})`
         );
       }
     }).catch(err => {

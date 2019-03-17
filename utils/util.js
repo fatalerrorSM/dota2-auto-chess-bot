@@ -135,7 +135,7 @@ const util = {
           rankString = "♚ King";
           break;
         case 38:
-          rankString = "♛ Queen";
+          rankString = `♛ Queen Rank#${data.user_info[steamID].queen_rank}`;
           break;
       }
     }
